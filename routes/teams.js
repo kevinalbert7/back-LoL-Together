@@ -2,11 +2,11 @@ const express = require("express")
 const multer = require("multer")
 const moment = require("moment")
 
-// const { verifyExistingUser } = require("../middlewares/auth")
+const { verifyUser } = require("../middlewares/auth")
 const User = require('../models/User')
 
 const app = express()
-// const upload = multer({ dest: 'public' })
+const upload = multer({ dest: 'public' })
 
 
 app.get('/', async (req, res) => {
@@ -47,3 +47,4 @@ app.get('/:id', async (req, res) => {
 //     console.log(fileName)
 //     fs.renameSync(path, ${destination}/${originalname})
 // })
+module.exports= app

@@ -44,7 +44,7 @@ const UserSchema = new mongoose.Schema({
             type : String,
         },
         annonce:{
-            type : String,
+            type :  mongoose.Schema.Types.ObjectId, ref: "Message",
         },
         conversation:{
             type : String,
