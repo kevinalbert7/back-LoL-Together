@@ -2,36 +2,52 @@ const express = require("express")
 const multer = require("multer")
 const moment = require("moment")
 
-const { verifyUser } = require("../middlewares/auth")
-const User = require('../models/User')
+const { verifyExistingTeam } = require("../middlewares/auth")
+const Team = require('../models/Team')
 
 const app = express()
 const upload = multer({ dest: 'public' })
 
+//---Route qui récupère toutes les teams---
 
 app.get('/', async (req, res) => {
     try {
-        const users = await User.find().exec()
+        const teams = await Team.find().exec()
 
-        res.json(users)
+        res.json(teams)
     } catch (err) {
         res.status(500).json({ error: err })
     }
 })
 
+//---Route qui récupère une team par son id---
 
 app.get('/:id', async (req, res) => {
     const { id } = req.params
 
     try {
-        const user = await User.findById(id).exec()
+        const team = await Team.findById(id).exec()
 
-        res.json(user)
+        res.json(team)
     } catch (err) {
         res.status(500).json({ error: err })
     }
 })
 
+//---Route qui créé une nouvelle team---
+
+app.post('/', verifyExistingTeam, async (req, res) => {
+    try {  
+      const newTeam = await Team.create({
+        ...req.body,
+      })
+  
+      res.json(newTeam)
+    } catch (e) {
+      console.log(e)
+      res.status(500).json({ error: "Oups, something went wrong" })
+    }
+})
 
 // app.post('/:id', upload.single('profilePicture'), (req, res) => {
 //     console.log(req.file)
@@ -47,4 +63,20 @@ app.get('/:id', async (req, res) => {
 //     console.log(fileName)
 //     fs.renameSync(path, ${destination}/${originalname})
 // })
+
+//---Route qui supprime une team---
+
+app.delete('/:id', async (req, res) => {
+    const { id } = req.params
+
+    try {
+        const teamDeleted = await Team.deleteOne({ _id: id }).exec()
+
+        res.json(teamDeleted)
+    } catch (err) {
+        res.status(500).json({ error: err })
+    }
+})
+
+
 module.exports= app

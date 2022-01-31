@@ -29,7 +29,7 @@ app.get('/:id', async (req, res) => {
     }
 })
 
-//---Route pour supprimer une conversation---
+//---Route qui supprime une conversation---
 
 app.delete('/:id', async (req, res) => {
     const { id } = req.params

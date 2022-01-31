@@ -8,10 +8,11 @@ const cors = require("cors")
 // const mongoose = require("mongoose")
 
 const authRoutes = require('./routes/auth')
-const messageRoutes = require('./routes/messages')
-const teamRoutes = require ('./routes/teams')
-const userRoutes = require ('./routes/users')
+const messagesRoutes = require('./routes/messages')
+const teamsRoutes = require ('./routes/teams')
+const usersRoutes = require ('./routes/users')
 const conversationsRoutes = require('./routes/conversations')
+
 app.use(cors({
     origin : 'http://localhost:3000',
     credentials : true
@@ -27,11 +28,11 @@ app.use(session({
 app.use(passport.initialize())
 app.use(passport.session())
 
-app.use('/auth',authRoutes)
-app.use('/user',userRoutes)
-app.use('/message',messageRoutes)
-app.use('/team',teamRoutes)
-app.use('/conversations',conversationsRoutes)
+app.use('/auth', authRoutes)
+app.use('/users', usersRoutes)
+app.use('/messages', messagesRoutes)
+app.use('/teams', teamsRoutes)
+app.use('/conversations', conversationsRoutes)
 
 dbConnect()
 

@@ -4,7 +4,7 @@ const Message = require("../models/Message")
 const User = require("../models/User")
 const app = express()
 
-//---Route qui récupère les messages---
+//---Route qui récupère tous les messages---
 
 app.get('/', async (req, res) => {
     try {

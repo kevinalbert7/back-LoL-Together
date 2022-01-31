@@ -1,10 +1,10 @@
 const mongoose = require("mongoose")
 
-const ConversationSchema= new mongoose.Schema({
+const ConversationSchema = new mongoose.Schema({
     
-        messages : [{
+        messages : {
             type : String,
-        }],
+        },
         users:[{
             type :  mongoose.Schema.Types.ObjectId, ref: "User",
         }]

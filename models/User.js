@@ -46,9 +46,9 @@ const UserSchema = new mongoose.Schema({
         annonce:{
             type :  mongoose.Schema.Types.ObjectId, ref: "Message",
         },
-        conversation:{
+        conversation:[{
             type : String,
-        },
+        }],
         website:{
             type : String,
         },
