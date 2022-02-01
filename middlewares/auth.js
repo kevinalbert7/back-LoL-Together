@@ -1,4 +1,5 @@
 const User = require("../models/User")
+const Team = require("../models/Team")
 
 const verifyExistingUser = async (req, res, next) => {
   const { username } = req.body
@@ -20,7 +21,20 @@ const isAuthentified = (req, res, next) => {
   }
 }
 
+const verifyExistingTeam = async (req, res, next) => {
+  const { name } = req.body
+
+  const team = await Team.findOne({ name }).exec()  
+
+  if (team) {
+    res.status(409).json({ error: "User already exists" })
+  } else {
+    next()
+  }
+}
+
 module.exports = {
   verifyExistingUser,
-  isAuthentified
+  isAuthentified,
+  verifyExistingTeam
 }

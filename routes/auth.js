@@ -7,6 +7,8 @@ const passport = require("../config/passport")
 const { verifyExistingUser } = require("../middlewares/auth")
 const User = require("../models/User")
 
+//----------------LOGIN-----------------
+
 app.post('/login',
   passport.authenticate("local"),
   (req, res) => {
@@ -21,6 +23,8 @@ app.post('/login',
     }
   }
 )
+
+//----------------SINGUP-----------------
 
 app.post('/signup', verifyExistingUser, async (req, res) => {
   try {
@@ -47,10 +51,12 @@ app.get('/me', (req, res) => {
     }
   })
   
-  app.delete('/logout', (req, res) => {
-    req.session.destroy()
-    req.logout() 
-    res.status(200).json({ success: "Sucess" })
-  })
+//----------------LOGOUT-----------------
+
+app.delete('/logout', (req, res) => {
+  req.session.destroy()
+  req.logout() 
+  res.status(200).json({ success: "Sucess" })
+})
   
   module.exports = app
