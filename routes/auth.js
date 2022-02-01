@@ -28,7 +28,7 @@ app.post('/signup', verifyExistingUser, async (req, res) => {
 
     const newUser = await User.create({
       ...req.body,
-      usertag: `@${req.body.username}`,
+      username: `@${req.body.username}`,
       password: hash
     })
 

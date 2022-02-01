@@ -12,13 +12,25 @@ const MessageSchema = new mongoose.Schema({
             type :  mongoose.Schema.Types.ObjectId, ref: "User",
         },
         conversation : {
-            type : String,
+            type :  mongoose.Schema.Types.ObjectId, ref: "Conversation",
         }   
     },    
     {
         timestamps: true
     }
 )
+MessageSchema.post('save', async function(message) {
+    await model('Conversation').findOneAndUpdate(
+      { _id: message.conversation },
+      { $push: { messages: conversation._id } }
+    )
+  })
+  MessageSchema.post('findOneAndDelete', async function(message) {
+    await model('User').findOneAndUpdate(
+      { _id: message.conversation  },
+      { $pull: { messages: conversation._id} }
+    )
+  })
 
 const Message = mongoose.model("Message" , MessageSchema)
 

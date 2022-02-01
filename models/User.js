@@ -40,19 +40,19 @@ const UserSchema = new mongoose.Schema({
         disponibilities:{
             type : String,
         },
-        role:{
+        roles:[{
             type : String,
-        },
-        annonce:{
-            type :  mongoose.Schema.Types.ObjectId, ref: "Message",
-        },
-        conversation:{
-            type : String,
-        },
+        }],
+        annonces:[{
+            type: mongoose.Schema.Types.ObjectId, ref: "Annonce"  
+        }],
+        conversations:[{
+            type :  mongoose.Schema.Types.ObjectId, ref: "Conversation",
+        }],
         website:{
             type : String,
         },
-        teams:[{
+        team:[{
             type :  mongoose.Schema.Types.ObjectId, ref: "Team",
         }] 
     },    

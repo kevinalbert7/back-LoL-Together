@@ -3,7 +3,7 @@ const mongoose = require("mongoose");
 const dbConnect = async () => {
     const dbName = 'Lol_together'
     // const dbUrlLocale = `mongodb://localhost:27017/${dbName}`
-    const dbUrlOnline = `mongodb+srv://Admin:Konexio@database.dm779.mongodb.net/${dbName}?retryWrites=true&w=majority`
+    const dbUrlOnline = `mongodb+srv://LoL_Together:T9YeXe96r@loltogether.uxpl6.mongodb.net/test`
 
     try {
         mongoose.connect(dbUrlOnline)

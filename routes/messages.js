@@ -37,10 +37,7 @@ app.post('/',
 
             const getUser = await User.findById(user_id)
 
-            if (getUser) {
-                getUser.messages.push(messageInsered._id)
-                await getUser.save()
-            }
+           
 
             res.json(messageInsered)
         } catch (err) {
