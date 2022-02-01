@@ -1,8 +1,9 @@
 require('dotenv').config()
+
 const express = require("express")
 const app = express()
 const port = process.env.PORT
-// const { dbConnect } = require("./config/db")
+const { dbConnect } = require("./config/db")
 const session = require("express-session")
 const passport = require("./config/passport")
 const cors = require("cors")
@@ -16,9 +17,12 @@ const teamsRoutes = require ('./routes/teams')
 const usersRoutes = require ('./routes/users')
 const conversationsRoutes = require('./routes/conversations')
 
+console.log("DB.URL :", process.env.DB_URL)
+const DB_URL = process.env.DB_URL
 mongoose.connect(process.env.DB_URL)
 const db = mongoose.connection
-db.on("erro", err => console.log(err))
+
+db.on("error", (err) => console.log(err))
 db.once("open", () => console.log("Connected to db"))
 
 app.use(cors({
@@ -40,6 +44,8 @@ app.use('/users', usersRoutes)
 app.use('/messages', messagesRoutes)
 app.use('/teams', teamsRoutes)
 app.use('/conversations', conversationsRoutes)
+
+dbConnect()
 
 app.listen(port, () => {
     console.log(`Server running on port ${port}`)
