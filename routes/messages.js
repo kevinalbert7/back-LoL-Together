@@ -20,10 +20,12 @@ app.get('/', async (req, res) => {
 app.post('/', 
     body('content')
         .isLength({ max:300 }).withMessage("Message is too long"),
-    async (req, res) => {
-        const { user_id } = req.body
 
+    async (req, res) => {
+        console.log("req.body :", req.body)
+        
         const { errors } = validationResult(req)
+        const { user_id } = req.body
 
         if (errors.length > 0) {
             res.status(400).json({ errors })
@@ -32,13 +34,15 @@ app.post('/',
 
         try {
             const message = new Message({ ...req.body})
-
+                console.log("user_id:", user_id)
             const messageInsered = await message.save()
 
             const getUser = await User.findById(user_id)
-
+            if (getUser) {
+                getUser.messages.push(messageInsered._id)
+                await getUser.save()
+            }
            
-
             res.json(messageInsered)
         } catch (err) {
             res.status(500).json({ error: err })
