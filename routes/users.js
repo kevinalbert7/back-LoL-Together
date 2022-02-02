@@ -1,12 +1,12 @@
 const express = require("express")
-// const multer = require("multer")
-// const moment = require("moment")
+const multer = require("multer")
+const moment = require("moment")
 
 const { verifyExistingUser } = require("../middlewares/auth")
 const User = require('../models/User')
 
 const app = express()
-// const upload = multer({ dest: 'public' })
+const upload = multer({ dest: 'public' })
 
 //---Route qui récupère les utilisateurs---
 
@@ -34,11 +34,13 @@ app.get('/:id', async (req, res) => {
     }
 })
 
+//---Route qui supprime un utilisateur---
+
 app.delete('/:id', async (req, res) => {
     const { id } = req.params
 
     try {
-        const userDeleted = await User.deleteOne({ _id: id }).exec()
+        const userDeleted = await User.findOneAndDelete({ _id: id }).exec()
 
         res.json(userDeleted)
     } catch (err) {
@@ -46,22 +48,21 @@ app.delete('/:id', async (req, res) => {
     }
 })
 
-
 //---Route qui upload un document---
 
-// app.post('/:id', upload.single('profilePicture'), (req, res) => {
-//     console.log(req.file)
-//     const { 
-//         path,
-//         destination,
-//         originalname
-//      } = req.file
+app.post('/:id', upload.single('avatar'), (req, res) => {
+    console.log(req.file)
+    const { 
+        path,
+        destination,
+        originalname
+     } = req.file
 
-//     const date = moment().format('DD-MM-YYYY-hh-mm-ss')
-//     console.log(date)
-//     const fileName = ${date}-${originalname}
-//     console.log(fileName)
-//     fs.renameSync(path, ${destination}/${originalname})
-// })
+    const date = moment().format('DD-MM-YYYY-hh-mm-ss')
+    console.log(date)
+    const fileName = `${date}-${originalname}`
+    console.log(fileName)
+    fs.renameSync(path, `${destination}/${originalname}`)
+})
 
 module.exports= app

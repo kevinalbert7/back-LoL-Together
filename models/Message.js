@@ -1,4 +1,5 @@
 const mongoose = require("mongoose")
+// const model Conversation = require("Conversation")
 
 const MessageSchema = new mongoose.Schema({
     
@@ -6,31 +7,37 @@ const MessageSchema = new mongoose.Schema({
             type : String,
         },
         sender : {
-            type :  mongoose.Schema.Types.ObjectId, ref: "User",
+            type : mongoose.Schema.Types.ObjectId, ref: "User",
         },
         receiver : {
-            type :  mongoose.Schema.Types.ObjectId, ref: "User",
+            type : mongoose.Schema.Types.ObjectId, ref: "User",
         },
         conversation : {
-            type :  mongoose.Schema.Types.ObjectId, ref: "Conversation",
+            type : mongoose.Schema.Types.ObjectId, ref: "Conversation",
         }   
     },    
     {
         timestamps: true
     }
 )
-MessageSchema.post('save', async function(message) {
-    await model('Conversation').findOneAndUpdate(
-      { _id: message.conversation },
-      { $push: { messages: conversation._id } }
-    )
-  })
-  MessageSchema.post('findOneAndDelete', async function(message) {
-    await model('User').findOneAndUpdate(
-      { _id: message.conversation  },
-      { $pull: { messages: conversation._id} }
-    )
-  })
+
+MessageSchema.post('save', async message => {
+  await mongoose.model('Conversation').findOneAndUpdate(
+    { _id: message.conversation },
+    { $push: { messages: message._id } }
+  )
+})
+
+MessageSchema.post('findOneAndDelete', async message => {
+  await mongoose.model('User').findOneAndUpdate(
+    { _id: message.user },
+    { $pull: { messages: message._id} }
+  )
+  await mongoose.model('Conversation').findOneAndUpdate(
+    { _id: message.conversation },
+    { $pull: { messages: message._id} }
+  )
+})
 
 const Message = mongoose.model("Message" , MessageSchema)
 

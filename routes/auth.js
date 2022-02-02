@@ -44,12 +44,12 @@ app.post('/signup', verifyExistingUser, async (req, res) => {
 })
 
 app.get('/me', (req, res) => {
-    if (req.user) {
-      res.json(req.user)
-    } else {
-      res.status(401).json({ error: "Unauthorized" })
-    }
-  })
+  if (req.user) {
+    res.json(req.user)
+  } else {
+    res.status(401).json({ error: "Unauthorized" })
+  }
+})
   
 //----------------LOGOUT-----------------
 

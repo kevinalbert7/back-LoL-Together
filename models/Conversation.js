@@ -5,7 +5,7 @@ const ConversationSchema = new mongoose.Schema({
         messages : [{
             type :  mongoose.Schema.Types.ObjectId, ref: "Message",
         }],
-        users:[{
+        users : [{
             type :  mongoose.Schema.Types.ObjectId, ref: "User",
         }]
     },    
@@ -14,19 +14,23 @@ const ConversationSchema = new mongoose.Schema({
     }
 )
 
-ConversationSchema.post('save', async function(conversation) {
-    await model('User').updateMany(
-      { _id:{$in : conversation.users } },
-      { $push: { conversations: conversation._id } }
-    )
-  })
+ConversationSchema.post('save', async conversations => {
+  await mongoose.model('User').updateMany(
+    { _id:{$in : conversations.users } },
+    { $push: { conversations: conversations._id } }
+  )
+})
 
-  ConversationSchema.post('findOneAndDelete', async function(conversation) {
-    await model('User').updateMany(
-      { _id:{$in : conversation.users } },
-      { $pull: { conversations: conversation._id} }
-    )
-  })
+ConversationSchema.post('findOneAndDelete', async conversations => {
+  await mongoose.model('User').deleteMany(
+    { conversations: {$in : conversations.users } },
+    { $pull: { conversations: conversations._id} }
+  )
+  await mongoose.model('Message').deleteMany(
+    { message: {$in : conversations.messages } },
+    { $pull: { conversations: conversations._id} }
+  )
+})
 
 const Conversation = mongoose.model("Conversation" , ConversationSchema)
 

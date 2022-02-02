@@ -35,7 +35,7 @@ app.delete('/:id', async (req, res) => {
     const { id } = req.params
 
     try {
-        const conversationDeleted = await Conversation.deleteOne({ _id: id }).exec()
+        const conversationDeleted = await Conversation.findOneAndDelete({ _id: id }).exec()
 
         res.json(conversationDeleted)
     } catch (err) {

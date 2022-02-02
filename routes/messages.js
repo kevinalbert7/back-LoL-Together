@@ -1,7 +1,6 @@
 const express = require("express")
 const { body, validationResult } = require("express-validator")
 const Message = require("../models/Message")
-const User = require("../models/User")
 const app = express()
 
 //---Route qui récupère tous les messages---
@@ -25,7 +24,6 @@ app.post('/',
         console.log("req.body :", req.body)
         
         const { errors } = validationResult(req)
-        const { user_id } = req.body
 
         if (errors.length > 0) {
             res.status(400).json({ errors })
@@ -34,17 +32,13 @@ app.post('/',
 
         try {
             const message = new Message({ ...req.body})
-                console.log("user_id:", user_id)
+            console.log(message)
             const messageInsered = await message.save()
-
-            const getUser = await User.findById(user_id)
-            if (getUser) {
-                getUser.messages.push(messageInsered._id)
-                await getUser.save()
-            }
-           
+            console.log(messageInsered)
             res.json(messageInsered)
         } catch (err) {
+            console.log(err)
+            
             res.status(500).json({ error: err })
         }
     }
@@ -70,7 +64,7 @@ app.delete('/:id', async (req, res) => {
     const { id } = req.params
 
     try {
-        const messageDeleted = await Message.deleteOne({ _id: id }).exec()
+        const messageDeleted = await Message.findOneAndDeleteOne({ _id: id }).exec()
 
         res.json(messageDeleted)
     } catch (err) {

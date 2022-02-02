@@ -49,20 +49,20 @@ app.post('/', verifyExistingTeam, async (req, res) => {
     }
 })
 
-// app.post('/:id', upload.single('profilePicture'), (req, res) => {
-//     console.log(req.file)
-//     const { 
-//         path,
-//         destination,
-//         originalname
-//      } = req.file
+app.post('/:id', upload.single('profilePicture'), (req, res) => {
+    console.log(req.file)
+    const { 
+        path,
+        destination,
+        originalname
+     } = req.file
 
-//     const date = moment().format('DD-MM-YYYY-hh-mm-ss')
-//     console.log(date)
-//     const fileName = ${date}-${originalname}
-//     console.log(fileName)
-//     fs.renameSync(path, ${destination}/${originalname})
-// })
+    const date = moment().format('DD-MM-YYYY-hh-mm-ss')
+    console.log(date)
+    const fileName = `${date}-${originalname}`
+    console.log(fileName)
+    fs.renameSync(path, `${destination}/${originalname}`)
+})
 
 //---Route qui supprime une team---
 
@@ -70,7 +70,7 @@ app.delete('/:id', async (req, res) => {
     const { id } = req.params
 
     try {
-        const teamDeleted = await Team.deleteOne({ _id: id }).exec()
+        const teamDeleted = await Team.findOneAndDelete({ _id: id }).exec()
 
         res.json(teamDeleted)
     } catch (err) {
