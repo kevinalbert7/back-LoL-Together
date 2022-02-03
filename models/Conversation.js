@@ -2,16 +2,16 @@ const mongoose = require("mongoose")
 
 const ConversationSchema = new mongoose.Schema({
     
-        messages : [{
-            type :  mongoose.Schema.Types.ObjectId, ref: "Message",
-        }],
-        users : [{
-            type :  mongoose.Schema.Types.ObjectId, ref: "User",
-        }]
-    },    
-    {
-        timestamps: true
-    }
+  messages: [{
+    type:  mongoose.Schema.Types.ObjectId, ref: "Message",
+  }],
+  users: [{
+    type:  mongoose.Schema.Types.ObjectId, ref: "User",
+  }]
+},    
+  {
+      timestamps: true
+  }
 )
 
 ConversationSchema.post('save', async conversations => {

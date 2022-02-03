@@ -2,63 +2,62 @@ const mongoose = require("mongoose")
 
 const UserSchema = new mongoose.Schema({
     
-        username : {
-            type : String,
-            unique: true,
-            required: true
-
-        },
-        password : {
-            type : String,
-            unique: true,
-            required : true, 
-        },
-        email:{
-            type : String,
-        },
-        summoner_name:{
-            type : String,
-        },
-        avatar:{
-            type : String,
-        },
-        rank:{
-            type : String,
-        },
-        discord:{
-            type : String,
-        },
-        email:{
-            type : String,
-        },
-        region:{
-            type : String,
-        },
-        languages:{
-            type : String,
-        },
-        description:{
-            type : String,
-        },
-        disponibilities:{
-            type : String,
-        },
-        roles:[{
-            type : String,
-        }],
-        announcements:[{
-            type : mongoose.Schema.Types.ObjectId, ref: "Announcement"  
-        }],
-        conversations:[{
-            type : mongoose.Schema.Types.ObjectId, ref: "Conversation",
-        }],
-        teams:[{
-            type : mongoose.Schema.Types.ObjectId, ref: "Team",
-        }], 
-        website:{
-            type : String,
-        }
-    },    
+    username: {
+        type : String,
+        unique: true,
+        required: true
+    },
+    password: {
+        type: String,
+        unique: true,
+        required : true, 
+    },
+    email: {
+        type: String,
+    },
+    summoner_name: {
+        type: String,
+    },
+    avatar: {
+        type: String,
+    },
+    rank: {
+        type: String,
+    },
+    discord: {
+        type: String,
+    },
+    email: {
+        type: String,
+    },
+    region: {
+        type: String,
+    },
+    languages: {
+        type: String,
+    },
+    description: {
+        type: String,
+    },
+    disponibilities: {
+        type: String,
+    },
+    roles: [{
+        type: String,
+    }],
+    announcements: [{
+        type: mongoose.Schema.Types.ObjectId, ref: "Announcement"  
+    }],
+    conversations: [{
+        type: mongoose.Schema.Types.ObjectId, ref: "Conversation",
+    }],
+    teams: [{
+        type: mongoose.Schema.Types.ObjectId, ref: "Team",
+    }], 
+    website: {
+        type: String,
+    }
+},    
     {
         timestamps: true
     }

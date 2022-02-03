@@ -2,19 +2,19 @@ const mongoose = require("mongoose")
 
 const AnnouncementSchema = new mongoose.Schema({
     
-        user : {
-            type: mongoose.Schema.Types.ObjectId, ref: "User"
-        },
-        text : {
-            type : String,
-        },
-        team : {
-            type : mongoose.Schema.Types.ObjectId, ref: "Team",
-        },
-    },    
-    {
-        timestamps: true
-    }
+  user: {
+      type: mongoose.Schema.Types.ObjectId, ref: "User"
+  },
+  text: {
+      type: String,
+  },
+  team: {
+      type: mongoose.Schema.Types.ObjectId, ref: "Team",
+  },
+},    
+  {
+      timestamps: true
+  }
 )
 
 // a tester en bdd

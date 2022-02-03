@@ -2,37 +2,40 @@ const mongoose = require("mongoose")
 
 const TeamSchema = new mongoose.Schema({
     
-        Leader_id : {
-            type : String,
-        },
-        name:{
-            type : String,
-        },
-        logo:{
-            type : String,
-        },
-        rank:{
-            type : String,
-        },
-        languages:{
-            type : String,
-        },
-        region:{
-            type : String,
-        },
-        description:{
-            type : String,
-        },
-        disponibilities:{
-            type : String,
-        },
-        website:{
-            type : String,
-        },
-        announcements:[{
-            type :  mongoose.Schema.Types.ObjectId, ref: "Announcement",
-        }],
-    },    
+    Leader_id: {
+        type: String,
+    },
+    name: {
+        type: String,
+    },
+    logo: {
+        type: String,
+    },
+    rank: {
+        type: String,
+    },
+    languages: {
+        type: String,
+    },
+    region: {
+        type: String,
+    },
+    description: {
+        type: String,
+    },
+    disponibilities: {
+        type: String,
+    },
+    website: {
+        type: String,
+    },
+    users: [{
+        type: mongoose.Schema.Types.ObjectId, ref: "User",
+    }],
+    announcements: [{
+        type: mongoose.Schema.Types.ObjectId, ref: "Announcement",
+    }],
+},    
     {
         timestamps: true
     }
@@ -40,7 +43,7 @@ const TeamSchema = new mongoose.Schema({
 
 TeamSchema.post('save', async team => {
     await mongoose.model('User').findOneAndUpdate(
-        { _id: team.user },
+        { _id: team.users },
         { $push: { teams: team._id } }
     )
     await mongoose.model('Announcement').findOneAndUpdate(
