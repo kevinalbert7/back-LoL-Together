@@ -32,6 +32,8 @@ app.get('/:id', async (req, res) => {
 })
 
 //---Route post d'une conversation---
+// rajouter le middleware qui vérifie l'existence de la conversation
+//
 
 app.post('/', async (req, res) => {
     try {

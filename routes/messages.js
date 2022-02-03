@@ -18,6 +18,10 @@ app.get('/', async (req, res) => {
 
 //---Nouveau message lié à un utilisateur---
 
+// on attend de recevoir l'id de la conversation 
+// (du sender et du receiver) le contenu
+// une fois sauvegardé, on rajoute le message à la conversation grâce à son id
+
 app.post('/', 
     // body('content')
     //     .isLength({ max:300 }).withMessage("Message is too long"),
@@ -34,12 +38,12 @@ app.post('/',
             conversation
           })
 
-        await User.updateOne(
+        await User.findOneAndUpdate(
             { _id: user_id },
             { $push: { conversations: conversation_id } }
         )
         
-        await Conversation.updateOne(
+        await Conversation.findOneAndUpdate(
             { _id: conversation_id },
             { $push: { message: message_id } }
         )
