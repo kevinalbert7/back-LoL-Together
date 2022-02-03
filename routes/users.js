@@ -7,7 +7,6 @@ const User = require('../models/User')
 
 const upload = multer({ dest: 'public' })
 
-
 //---Route qui récupère les utilisateurs---
 
 app.get('/', async (req, res) => {
@@ -15,6 +14,20 @@ app.get('/', async (req, res) => {
         const users = await User.find().exec()
 
         res.json(users)
+    } catch (err) {
+        res.status(500).json({ error: err })
+    }
+})
+
+//---Route qui récupère l'utilisateur par son id---
+
+app.get('/:id', async (req, res) => {
+    const { id } = req.params
+    
+    try {
+        const user = await User.findById(id).exec()
+        .populate('teams')
+        res.json(user)
     } catch (err) {
         res.status(500).json({ error: err })
     }
@@ -43,20 +56,6 @@ app.post('/upload/:id', upload.single('avatar'), async(req, res) => {
         res.json({ success: "logo uploaded" })
     } catch (e) {
         res.status(500).json({ error : "something went wrong" })
-    }
-})
-
-//---Route qui récupère l'utilisateur par son id---
-
-app.get('/:id', async (req, res) => {
-    const { id } = req.params
-
-    try {
-        const user = await User.findById(id).exec()
-            .populate('teams')
-        res.json(user)
-    } catch (err) {
-        res.status(500).json({ error: err })
     }
 })
 
