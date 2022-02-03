@@ -27,6 +27,13 @@ app.get('/:id', async (req, res) => {
     try {
         const user = await User.findById(id)
         .populate('teams')
+        .populate('announcements')
+        .populate({
+            path: 'conversations',
+            populate: {
+                path: 'messages'
+            }
+        })
         .exec()
         res.json(user)
     } catch (err) {
