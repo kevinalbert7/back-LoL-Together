@@ -46,7 +46,7 @@ app.delete('/:id', async (req, res) => {
   const { id } = req.params
 
   try{
-    const announcementDeleted = await Announcement.findOneAndDelete({ _id: id }).exec()
+    await Announcement.findOneAndDelete({ _id: id }).exec()
     
     res.json({ success: 'Announcement successfully deleted' })
   } catch (err) {

@@ -59,6 +59,23 @@ app.post('/upload/:id', upload.single('avatar'), async(req, res) => {
     }
 })
 
+//---Route qui modifie un utilisateur---
+app.put('/:id', async (req, res) => {
+    const { id } = req.params
+  
+    try {
+      const user = await User.findOneAndUpdate(
+        { _id: id },
+        { ...req.body },
+        { new: true }
+      ).exec()
+      res.json(user)
+    } catch (err) {
+      console.log(err)
+      res.status(500).json({ error: err })
+    }
+  })
+  
 //---Route qui supprime un utilisateur---
 
 app.delete('/:id', async (req, res) => {
