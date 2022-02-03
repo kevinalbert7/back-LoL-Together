@@ -48,13 +48,13 @@ TeamSchema.post('save', async team => {
     )
     await mongoose.model('Announcement').findOneAndUpdate(
         { _id: team.announcements },
-        { $push: { teams: announcements._id } }
+        { $push: { teams: announcement._id } }
       )
 })
 
 TeamSchema.post('findOneAndDelete', async team => {
     await mongoose.model('User').findOneAndUpdate(
-        { _id: team.user },
+        { _id: team.users },
         { $pull: { teams: team._id} }
     )
     await mongoose.model('Announcement').findOneAndUpdate(

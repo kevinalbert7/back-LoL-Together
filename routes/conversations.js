@@ -21,13 +21,36 @@ app.get('/:id', async (req, res) => {
     const { id } = req.params
 
     try {
-        const conversations = await Conversation.findById(id).exec()
+        const conversation = await Conversation.findById(id).exec()
+            .populate('messages', 'user')
+            .exec()
 
-        res.json(conversations)
+        res.json(conversation)
     } catch (err) {
         res.status(500).json({ error: err })
     }
 })
+
+//---Route post d'une conversation---
+
+app.post('/', async (req, res) => {
+    try {
+      const conversation = await new Conversation({ ...req.body })
+  
+      conversation.save((err, conversation) => {
+        if (conversation) {
+          res.json(conversation)
+          return
+        }
+  
+        console.log(err)
+        res.status(500).json({ error: err })
+      })
+    } catch (error) {
+      console.log(err)
+      res.status(500).json({ error: err })
+    }
+  })
 
 //---Route qui supprime une conversation---
 

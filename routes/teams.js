@@ -3,7 +3,7 @@ const multer = require("multer")
 const moment = require("moment")
 
 const { verifyExistingTeam } = require("../middlewares/auth")
-// const Team = require('../models/Team')
+const Team = require('../models/Team')
 
 const app = express()
 const upload = multer({ dest: 'public' })
@@ -43,9 +43,9 @@ app.post('/', verifyExistingTeam, async (req, res) => {
       })
   
       res.json(newTeam)
-    } catch (e) {
-      console.log(e)
-      res.status(500).json({ error: "Oups, something went wrong" })
+    } catch (err) {
+      console.log(err)
+      res.status(500).json({ error: err })
     }
 })
 

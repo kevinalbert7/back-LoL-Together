@@ -1,7 +1,9 @@
 const express = require("express")
-const { body, validationResult } = require("express-validator")
-const Message = require("../models/Message")
 const app = express()
+// const { body, validationResult } = require("express-validator")
+const User = require("../models/User")
+const Conversation = require("../models/Conversation")
+const Message = require('../models/Message')
 
 //---Route qui récupère tous les messages---
 
@@ -17,30 +19,58 @@ app.get('/', async (req, res) => {
 //---Nouveau message lié à un utilisateur---
 
 app.post('/', 
-    body('content')
-        .isLength({ max:300 }).withMessage("Message is too long"),
+    // body('content')
+    //     .isLength({ max:300 }).withMessage("Message is too long"),
 
     async (req, res) => {
-        console.log("req.body :", req.body)
         
-        const { errors } = validationResult(req)
+        // const { errors } = validationResult(req)
+        const { user_id, conversation } = req.body
 
-        if (errors.length > 0) {
-            res.status(400).json({ errors })
-            return
-        }
+        const message = await Message.create({
+            text,
+            sender,
+            receiver,
+            conversation
+          })
 
-        try {
-            const message = new Message({ ...req.body})
-            console.log(message)
-            const messageInsered = await message.save()
-            console.log(messageInsered)
-            res.json(messageInsered)
-        } catch (err) {
-            console.log(err)
+        await User.updateOne(
+            { _id: user_id },
+            { $push: { conversations: conversation_id } }
+        )
+        
+        await Conversation.updateOne(
+            { _id: conversation_id },
+            { $push: { message: message_id } }
+        )
+        res.json({ success: "message posted"})
+
+        // if (errors.length > 0) {
+        //     res.status(400).json({ errors })
+        //     return
+        // }
+
+        // try {
+        //     const message = await new Message({ ...req.body })
+
+        //     message.save(async (err, message) => {
+
+        //         if (message) {
+        //             const getConversation = await Conversation.findById(conversation)
+        //             getConversation.messages.push(message._id)
+        //             getConversation.save()
             
-            res.status(500).json({ error: err })
-        }
+        //             res.json(message)
+        //             return
+        //         }
+
+        //         res.status(500).json({ error: err })
+        //     })
+
+        // } catch (err) {
+        //     console.log(err)
+        //     res.status(500).json({ error: err })
+        // }
     }
 )
 
@@ -50,8 +80,8 @@ app.get('/:id', async (req, res) => {
     const { id } = req.params
 
     try {
-        const message = await Message.findById(id).exec()
-        .populate('sender', 'receiver', 'conversation')
+        const message = await Message.findById(id)
+        .populate('conversation')
         .exec()
 
         res.json(message)

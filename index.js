@@ -11,7 +11,7 @@ const mongoose = require("mongoose")
 
 require('./models/Announcement')
 require('./models/Conversation')
-// require('./models/Team')
+require('./models/Team')
 require('./models/Message')
 require('./models/User')
 

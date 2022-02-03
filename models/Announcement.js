@@ -18,25 +18,25 @@ const AnnouncementSchema = new mongoose.Schema({
 )
 
 // a tester en bdd
-AnnouncementSchema.post('save', async announcements => {
+AnnouncementSchema.post('save', async announcement => {
   await mongoose.model('User').findOneAndUpdate(
-    { _id: announcements.user },
-    { $push: { announcements: announcements._id } }
+    { _id: announcement.user },
+    { $push: { announcements: announcement._id } }
   )
   await mongoose.model('Team').findOneAndUpdate(
-    { _id: announcements.team },
-    { $push: { announcements: announcements._id } }
+    { _id: announcement.team },
+    { $push: { announcements: announcement._id } }
   )
 })
 
-AnnouncementSchema.post('findOneAndDelete', async announcements => {
+AnnouncementSchema.post('findOneAndDelete', async announcement => {
   await mongoose.model('User').findOneAndUpdate(
-    { _id: announcements.user },
-    { $pull: { announcements: announcements._id} }
+    { _id: announcement.user },
+    { $pull: { announcements: announcement._id} }
   )
   await mongoose.model('Team').findOneAndUpdate(
-    { _id: announcements.team },
-    { $pull: { announcements: announcements._id} }
+    { _id: announcement.team },
+    { $pull: { announcements: announcement._id} }
   )
 })
 
