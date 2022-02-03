@@ -1,11 +1,10 @@
 const express = require("express")
+const app = express()
 const multer = require("multer")
 const moment = require("moment")
-
-const { verifyExistingUser } = require("../middlewares/auth")
+const fs = require('fs')
 const User = require('../models/User')
 
-const app = express()
 const upload = multer({ dest: 'public' })
 
 //---Route qui récupère les utilisateurs---
@@ -24,13 +23,39 @@ app.get('/', async (req, res) => {
 
 app.get('/:id', async (req, res) => {
     const { id } = req.params
-
+    
     try {
         const user = await User.findById(id).exec()
-
+        .populate('teams')
         res.json(user)
     } catch (err) {
         res.status(500).json({ error: err })
+    }
+})
+
+//---Route qui upload un logo---
+
+app.post('/upload/:id', upload.single('avatar'), async(req, res) => {
+    const { id } = req.params
+    const { 
+        path,
+        destination,
+        originalname
+     } = req.file
+
+    try {
+        const date = moment().format('DD-MM-YYYY-hh-mm-ss')
+        const fileName = `${date}-${originalname}`
+        fs.renameSync(path, `${destination}/${fileName}`)
+    
+        await User.findOneAndUpdate(
+            { _id: id },
+            { avatar: `http://localhost:5000/${fileName}` }
+        )
+    
+        res.json({ success: "logo uploaded" })
+    } catch (e) {
+        res.status(500).json({ error : "something went wrong" })
     }
 })
 
@@ -48,21 +73,5 @@ app.delete('/:id', async (req, res) => {
     }
 })
 
-//---Route qui upload un document---
-
-app.post('/:id', upload.single('avatar'), (req, res) => {
-    console.log(req.file)
-    const { 
-        path,
-        destination,
-        originalname
-     } = req.file
-
-    const date = moment().format('DD-MM-YYYY-hh-mm-ss')
-    console.log(date)
-    const fileName = `${date}-${originalname}`
-    console.log(fileName)
-    fs.renameSync(path, `${destination}/${originalname}`)
-})
 
 module.exports= app

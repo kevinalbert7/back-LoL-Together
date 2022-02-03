@@ -3,7 +3,7 @@ const multer = require("multer")
 const moment = require("moment")
 
 const { verifyExistingTeam } = require("../middlewares/auth")
-const Team = require('../models/Team')
+// const Team = require('../models/Team')
 
 const app = express()
 const upload = multer({ dest: 'public' })
@@ -49,7 +49,9 @@ app.post('/', verifyExistingTeam, async (req, res) => {
     }
 })
 
-app.post('/:id', upload.single('profilePicture'), (req, res) => {
+//---Route qui upload un logo---
+
+app.post('/:id', upload.single('logo'), (req, res) => {
     console.log(req.file)
     const { 
         path,
@@ -62,6 +64,7 @@ app.post('/:id', upload.single('profilePicture'), (req, res) => {
     const fileName = `${date}-${originalname}`
     console.log(fileName)
     fs.renameSync(path, `${destination}/${originalname}`)
+    res.json({ success: "logo uploaded" })
 })
 
 //---Route qui supprime une team---
@@ -77,6 +80,5 @@ app.delete('/:id', async (req, res) => {
         res.status(500).json({ error: err })
     }
 })
-
 
 module.exports= app

@@ -51,6 +51,8 @@ app.get('/:id', async (req, res) => {
 
     try {
         const message = await Message.findById(id).exec()
+        .populate('sender', 'receiver', 'conversation')
+        .exec()
 
         res.json(message)
     } catch (err) {
