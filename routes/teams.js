@@ -67,6 +67,24 @@ app.post('/:id', upload.single('logo'), (req, res) => {
     res.json({ success: "logo uploaded" })
 })
 
+//---Route qui modifie une team---
+app.put('/:id', async (req, res) => {
+    const { id } = req.params
+  
+    try {
+      const team = await Team.findOneAndUpdate(
+        { _id: id },
+        { ...req.body },
+        { new: true }
+      ).exec()
+      res.json(team)
+    } catch (err) {
+      console.log(err)
+      res.status(500).json({ error: err })
+    }
+})
+  
+
 //---Route qui supprime une team---
 
 app.delete('/:id', async (req, res) => {
