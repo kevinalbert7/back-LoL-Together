@@ -26,6 +26,10 @@ MessageSchema.post('save', async message => {
     { _id: message.conversation },
     { $push: { messages: message._id } }
   )
+  //checker si le message a une conversationId
+  // si oui j'éxecute ma promesse
+  // sinon je créé une conversation
+  // je pousse mon message
 })
 
 MessageSchema.post('findOneAndDelete', async message => {

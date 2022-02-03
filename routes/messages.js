@@ -1,6 +1,6 @@
 const express = require("express")
 const app = express()
-// const { body, validationResult } = require("express-validator")
+const { verifyExistingConversation } = require("../middlewares/conversation")
 const User = require("../models/User")
 const Conversation = require("../models/Conversation")
 const Message = require('../models/Message')
@@ -22,61 +22,55 @@ app.get('/', async (req, res) => {
 // (du sender et du receiver) le contenu
 // une fois sauvegardé, on rajoute le message à la conversation grâce à son id
 
-app.post('/', 
-    // body('content')
-    //     .isLength({ max:300 }).withMessage("Message is too long"),
-
-    async (req, res) => {
+app.post('/', verifyExistingConversation, async (req, res) => {
         
-        // const { errors } = validationResult(req)
-        const { user_id, conversation } = req.body
+    const { 
+        id,
+        user_id,
+        // conversation,
+        conversation_id,
+        message_id
+    } = req.body
 
-        const message = await Message.create({
-            text,
-            sender,
-            receiver,
-            conversation
-          })
+    // const message = await Message.create({
+    //     conversation
+    // })
 
-        await User.findOneAndUpdate(
-            { _id: user_id },
-            { $push: { conversations: conversation_id } }
-        )
+    const conversation = await Conversation.findById(id)
+
+    await User.findOneAndUpdate(
+        { _id: user_id },
+        { $push: { conversations: conversation,...conversation_id } }
+    )
+    
+    await Conversation.findOneAndUpdate(
+        { _id: conversation_id },
+        { $push: { message: message_id } }
+    )
+    res.json({ success: "message posted"})
+
+    try {
+        const message = await new Message({ ...req.body })
+
+        message.save(async (err, message) => {
+
+            if (message) {
+                const getConversation = await Conversation.findById(conversation)
+                getConversation.messages.push(message._id)
+                getConversation.save()
         
-        await Conversation.findOneAndUpdate(
-            { _id: conversation_id },
-            { $push: { message: message_id } }
-        )
-        res.json({ success: "message posted"})
+                res.json(message)
+                return
+            }
 
-        // if (errors.length > 0) {
-        //     res.status(400).json({ errors })
-        //     return
-        // }
+            res.status(500).json({ error: err })
+        })
 
-        // try {
-        //     const message = await new Message({ ...req.body })
-
-        //     message.save(async (err, message) => {
-
-        //         if (message) {
-        //             const getConversation = await Conversation.findById(conversation)
-        //             getConversation.messages.push(message._id)
-        //             getConversation.save()
-            
-        //             res.json(message)
-        //             return
-        //         }
-
-        //         res.status(500).json({ error: err })
-        //     })
-
-        // } catch (err) {
-        //     console.log(err)
-        //     res.status(500).json({ error: err })
-        // }
+    } catch (err) {
+        console.log(err)
+        res.status(500).json({ error: err })
     }
-)
+})
 
 //---Route qui récupère un message par son id---
 
