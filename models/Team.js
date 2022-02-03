@@ -2,8 +2,9 @@ const mongoose = require("mongoose")
 
 const TeamSchema = new mongoose.Schema({
     
-    Leader_id: {
+    leader_id: {
         type: String,
+        required : true, 
     },
     name: {
         type: String,

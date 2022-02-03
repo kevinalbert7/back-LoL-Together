@@ -25,8 +25,9 @@ app.get('/:id', async (req, res) => {
     const { id } = req.params
     
     try {
-        const user = await User.findById(id).exec()
+        const user = await User.findById(id)
         .populate('teams')
+        .exec()
         res.json(user)
     } catch (err) {
         res.status(500).json({ error: err })

@@ -17,14 +17,12 @@ const UserSchema = new mongoose.Schema({
     },
     summoner_name: {
         type: String,
+        required: true
     },
     summoner_infos: {
         type: Object,
     },
     avatar: {
-        type: String,
-    },
-    rank: {
         type: String,
     },
     discord: {
