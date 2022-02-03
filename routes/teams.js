@@ -53,21 +53,21 @@ app.post('/', verifyExistingTeam, async (req, res) => {
 
 //---Route qui upload un logo---
 
-app.post('/:id', upload.single('logo'), (req, res) => {
-    console.log(req.file)
-    const { 
-        path,
-        destination,
-        originalname
-     } = req.file
+// app.post('/:id', upload.single('logo'), (req, res) => {
+//     console.log(req.file)
+//     const { 
+//         path,
+//         destination,
+//         originalname
+//      } = req.file
 
-    const date = moment().format('DD-MM-YYYY-hh-mm-ss')
-    console.log(date)
-    const fileName = `${date}-${originalname}`
-    console.log(fileName)
-    fs.renameSync(path, `${destination}/${originalname}`)
-    res.json({ success: "logo uploaded" })
-})
+//     const date = moment().format('DD-MM-YYYY-hh-mm-ss')
+//     console.log(date)
+//     const fileName = `${date}-${originalname}`
+//     console.log(fileName)
+//     fs.renameSync(path, `${destination}/${originalname}`)
+//     res.json({ success: "logo uploaded" })
+// })
 
 //---Route qui modifie une team---
 app.put('/:id', async (req, res) => {
