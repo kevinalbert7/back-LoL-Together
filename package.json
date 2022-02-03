@@ -17,6 +17,7 @@
   },
   "homepage": "https://github.com/vincennt/back-LoL-Together#readme",
   "dependencies": {
+    "axios": "^0.25.0",
     "bcrypt": "^5.0.1",
     "cors": "^2.8.5",
     "dotenv": "^15.0.0",

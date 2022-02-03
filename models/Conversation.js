@@ -16,7 +16,7 @@ const ConversationSchema = new mongoose.Schema({
 
 ConversationSchema.post('save', async conversations => {
   await mongoose.model('User').updateMany(
-    { _id:{$in : conversations.users } },
+    { _id:{ $in : conversations.users } },
     { $push: { conversations: conversations._id } }
   )
 })
