@@ -1,5 +1,5 @@
 const User = require("../models/User")
-// const Team = require("../models/Team")
+const Team = require("../models/Team" )
 
 const verifyExistingUser = async (req, res, next) => {
   const { username } = req.body
