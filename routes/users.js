@@ -36,29 +36,29 @@ app.get('/:id', async (req, res) => {
 
 //---Route qui upload un logo---
 
-app.post('/upload/:id', upload.single('avatar'), async(req, res) => {
-    const { id } = req.params
-    const { 
-        path,
-        destination,
-        originalname
-     } = req.file
+// app.post('/upload/:id', upload.single('avatar'), async(req, res) => {
+//     const { id } = req.params
+//     const { 
+//         path,
+//         destination,
+//         originalname
+//      } = req.file
 
-    try {
-        const date = moment().format('DD-MM-YYYY-hh-mm-ss')
-        const fileName = `${date}-${originalname}`
-        fs.renameSync(path, `${destination}/${fileName}`)
+//     try {
+//         const date = moment().format('DD-MM-YYYY-hh-mm-ss')
+//         const fileName = `${date}-${originalname}`
+//         fs.renameSync(path, `${destination}/${fileName}`)
     
-        await User.findOneAndUpdate(
-            { _id: id },
-            { avatar: `http://localhost:5000/${fileName}` }
-        )
+//         await User.findOneAndUpdate(
+//             { _id: id },
+//             { avatar: `http://localhost:5000/${fileName}` }
+//         )
     
-        res.json({ success: "logo uploaded" })
-    } catch (e) {
-        res.status(500).json({ error : "something went wrong" })
-    }
-})
+//         res.json({ success: "Avatar uploaded" })
+//     } catch (e) {
+//         res.status(500).json({ error : "something went wrong" })
+//     }
+// })
 
 //---Route qui modifie un utilisateur---
 app.put('/:id', async (req, res) => {
