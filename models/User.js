@@ -18,6 +18,9 @@ const UserSchema = new mongoose.Schema({
     summoner_name: {
         type: String,
     },
+    summoner_infos: {
+        type: Object,
+    },
     avatar: {
         type: String,
     },

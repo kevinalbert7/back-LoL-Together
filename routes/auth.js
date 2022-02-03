@@ -1,11 +1,14 @@
 const express = require("express")
 const app = express()
+const axios = require("axios")
 const bcrypt = require("bcrypt")
 
 const passport = require("../config/passport")
 
 const { verifyExistingUser } = require("../middlewares/auth")
 const User = require("../models/User")
+
+const api_key = "RGAPI-185af702-858a-4302-b4d7-5a9dff310c98"
 
 //----------------LOGIN-----------------
 
@@ -30,10 +33,13 @@ app.post('/signup', verifyExistingUser, async (req, res) => {
   try {
     const hash = await bcrypt.hash(req.body.password, 10)
 
+    const infos = await axios.get(`https://euw1.api.riotgames.com/lol/summoner/v4/summoners/by-name/${req.body.summoner_name}?api_key=${api_key}`)
+    
     const newUser = await User.create({
       ...req.body,
       username: `${req.body.username}`,
-      password: hash
+      password: hash,
+      summoner_infos : infos.data
     })
 
     res.json(newUser)
