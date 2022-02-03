@@ -28,6 +28,7 @@ app.get('/:id', async (req, res) => {
     try {
         const team = await Team.findById(id)
         .populate('users')
+        .populate('announcements')
         .exec()
 
         res.json(team)
