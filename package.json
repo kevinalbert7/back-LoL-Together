@@ -1,0 +1,34 @@
+{
+  "name": "back-lol-together",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/vincennt/back-LoL-Together.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/vincennt/back-LoL-Together/issues"
+  },
+  "homepage": "https://github.com/vincennt/back-LoL-Together#readme",
+  "dependencies": {
+    "bcrypt": "^5.0.1",
+    "cors": "^2.8.5",
+    "dotenv": "^15.0.0",
+    "express": "^4.17.2",
+    "express-session": "^1.17.2",
+    "express-static": "^1.2.6",
+    "express-validator": "^6.14.0",
+    "moment": "^2.29.1",
+    "mongoose": "^6.1.8",
+    "morgan": "^1.10.0",
+    "multer": "^1.4.4",
+    "passport": "^0.5.2",
+    "passport-local": "^1.0.0"
+  }
+}
