@@ -46,10 +46,6 @@ TeamSchema.post('save', async team => {
         { _id: team.users },
         { $push: { teams: team._id } }
     )
-    await mongoose.model('Announcement').findOneAndUpdate(
-        { _id: team.announcements },
-        { $push: { teams: announcements._id } }
-      )
 })
 
 TeamSchema.post('findOneAndDelete', async team => {
@@ -57,11 +53,7 @@ TeamSchema.post('findOneAndDelete', async team => {
         { _id: team.user },
         { $pull: { teams: team._id} }
     )
-    await mongoose.model('Announcement').findOneAndUpdate(
-        { _id: team.announcements },
-        { $pull: { teams: team._id} }
-    )
-  })
+})
 
 const Team = mongoose.model("Team" , TeamSchema)
 
