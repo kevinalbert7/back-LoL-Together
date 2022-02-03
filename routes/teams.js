@@ -1,11 +1,11 @@
 const express = require("express")
 const multer = require("multer")
-const moment = require("moment")
+const app = express()
+// const moment = require("moment")
 
 const { verifyExistingTeam } = require("../middlewares/auth")
 const Team = require('../models/Team')
 
-const app = express()
 const upload = multer({ dest: 'public' })
 
 //---Route qui récupère toutes les teams---
