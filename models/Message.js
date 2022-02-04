@@ -1,5 +1,5 @@
+const req = require("express/lib/request")
 const mongoose = require("mongoose")
-// const model Conversation = require("Conversation")
 
 const MessageSchema = new mongoose.Schema({
     
@@ -21,13 +21,6 @@ const MessageSchema = new mongoose.Schema({
   }
 )
 
-MessageSchema.post('save', async message => {
-  await mongoose.model('Conversation').findOneAndUpdate(
-    { _id: message.conversation },
-    { $push: { messages: message._id } }
-  )
-})
-
 MessageSchema.post('findOneAndDelete', async message => {
   await mongoose.model('User').findOneAndUpdate(
     { _id: message.user },
@@ -37,6 +30,39 @@ MessageSchema.post('findOneAndDelete', async message => {
     { _id: message.conversation },
     { $pull: { messages: message._id} }
   )
+})
+
+MessageSchema.post('save', async function (message) {
+  if (message.conversation) {
+    //mise à jour
+    //la conversation en poussant le message dans la conversation
+    await mongoose.model('Conversation').findOneAndUpdate(
+      { _id: message.conversation },
+      { $push: { messages: message._id } }
+      )
+  } else {
+    const newConversation = await mongoose.model('Conversation').create({ 
+      users: [message.sender, message.receiver],
+      messages: [message._id]
+     })
+    const newConversationID = newConversation._id.toString()
+
+    //  console.log(newConversationID)
+    await mongoose.model('User').findOneAndUpdate(
+      { _id:{ $in : [message.sender, message.receiver] } },
+      { $push: { conversations: message.conversation } }
+    )
+    await mongoose.model('Message').findOneAndUpdate(
+      { _id: message.id  },
+      { conversation: newConversationID }
+    )
+    // créer la conversation
+    // avec users: [message.sender, message.receiver]
+    // messages: [message._id]
+
+    // update le user en lui mettant la conversation
+    // update le message en lui mettant la conversation
+  }
 })
 
 const Message = mongoose.model("Message" , MessageSchema)
