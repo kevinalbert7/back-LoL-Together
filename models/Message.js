@@ -1,5 +1,5 @@
 const mongoose = require("mongoose")
-// const model Conversation = require("Conversation")
+const Conversation = require("./Conversation")
 
 const MessageSchema = new mongoose.Schema({
     
@@ -30,6 +30,26 @@ MessageSchema.post('save', async message => {
   // si oui j'éxecute ma promesse
   // sinon je créé une conversation
   // je pousse mon message
+  // const { conversation } = req.body
+
+  const { id } = req.params
+  const conversation = conversations.find(conversation => conversation.id === Number(id))
+
+  if(conversation) {
+    req.conversation = conversation
+  } else {
+
+  }
+
+  // try {
+  //   const conversation = await Conversation.findById(id)
+  //   res.json(conversation)
+  // } catch {
+  //   await new Conversation.create({
+  //     users_id, message_id
+  //   })
+  // }
+
 })
 
 MessageSchema.post('findOneAndDelete', async message => {

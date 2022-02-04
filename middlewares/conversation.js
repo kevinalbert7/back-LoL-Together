@@ -25,19 +25,19 @@ const Message = require("../models/Message")
 
 //---deuxieme version---
 
-const verifyExistingConversation = async(req, res, next) => {
-    const { id } = req.params
+// const verifyExistingConversation = async(req, res, next) => {
+//     const { id } = req.params
 
-    const conversation = await Conversation.users.findById(id)
+//     const conversation = await Conversation.users.findById(id)
 
-    if(!conversation) {
-        res.json(conversation)
-    } else {
-        Message.create({
-            conversation
-        })
-    }
-}
+//     if(!conversation) {
+//         res.json(conversation)
+//     } else {
+//         Message.create({
+//             conversation
+//         })
+//     }
+// }
 
 
 

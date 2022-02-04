@@ -1,6 +1,6 @@
 const express = require("express")
 const app = express()
-const { verifyExistingConversation } = require("../middlewares/conversation")
+// const { verifyExistingConversation } = require("../middlewares/conversation")
 const User = require("../models/User")
 const Conversation = require("../models/Conversation")
 const Message = require('../models/Message')
@@ -22,12 +22,11 @@ app.get('/', async (req, res) => {
 // (du sender et du receiver) le contenu
 // une fois sauvegardé, on rajoute le message à la conversation grâce à son id
 
-app.post('/', verifyExistingConversation, async (req, res) => {
-        
+app.post('/:id', async (req, res) => {
+    const { id } = req.params
     const { 
-        id,
         user_id,
-        // conversation,
+        conversation,
         conversation_id,
         message_id
     } = req.body
@@ -36,40 +35,40 @@ app.post('/', verifyExistingConversation, async (req, res) => {
     //     conversation
     // })
 
-    const conversation = await Conversation.findById(id)
+    await Conversation.findById(id)
 
     await User.findOneAndUpdate(
         { _id: user_id },
-        { $push: { conversations: conversation,...conversation_id } }
+        { $push: { conversations: conversation_id } }
     )
     
     await Conversation.findOneAndUpdate(
         { _id: conversation_id },
         { $push: { message: message_id } }
     )
-    res.json({ success: "message posted"})
+    // res.json({ success: "message posted"})
 
-    try {
-        const message = await new Message({ ...req.body })
+    // try {
+    //     const message = await new Message({ ...req.body })
 
-        message.save(async (err, message) => {
+    //     message.save(async (err, message) => {
 
-            if (message) {
-                const getConversation = await Conversation.findById(conversation)
-                getConversation.messages.push(message._id)
-                getConversation.save()
+    //         if (message) {
+    //             const getConversation = await Conversation.findById(conversation)
+    //             getConversation.messages.push(message._id)
+    //             getConversation.save()
         
-                res.json(message)
-                return
-            }
+    //             res.json(message)
+    //             return
+    //         }
 
-            res.status(500).json({ error: err })
-        })
+    //         res.status(500).json({ error: err })
+    //     })
 
-    } catch (err) {
-        console.log(err)
-        res.status(500).json({ error: err })
-    }
+    // } catch (err) {
+    //     console.log(err)
+    //     res.status(500).json({ error: err })
+    // }
 })
 
 //---Route qui récupère un message par son id---
