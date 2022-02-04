@@ -21,7 +21,7 @@ app.post('/',
         .isLength({ max:300 }).withMessage("Message is too long"),
 
     async (req, res) => {
-        console.log("req.body :", req.body)
+        // console.log("req.body :", req.body)
         
         const { errors } = validationResult(req)
 
@@ -32,13 +32,12 @@ app.post('/',
 
         try {
             const message = new Message({ ...req.body})
-            console.log(message)
+            // console.log(message)
             const messageInsered = await message.save()
-            console.log(messageInsered)
+            // console.log(messageInsered)
             res.json(messageInsered)
         } catch (err) {
             console.log(err)
-            
             res.status(500).json({ error: err })
         }
     }
