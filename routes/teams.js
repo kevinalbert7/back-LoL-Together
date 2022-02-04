@@ -13,7 +13,7 @@ const upload = multer({ dest: 'public' })
 app.get('/', async (req, res) => {
     try {
         const teams = await Team.find().exec()
-
+        
         res.json(teams)
     } catch (err) {
         res.status(500).json({ error: err })
@@ -123,18 +123,12 @@ app.get('/filter', async (req, res) => {
     
     console.log(req.query)
     try {
-        const filterUser = await User.find(findParams)
+        const filterTeams = await Team.find(findParams)
             .sort({ username: sort })
-            .populate('teams')
+            .populate('users')
             .populate('announcements')
-            .populate({
-                path: 'conversations',
-                populate: {
-                    path: 'messages'
-                }
-            })
             .exec()
-        res.json(filterUser) 
+        res.json(filterTeams) 
     } catch (err) {
         console.log(err)
         res.status(500).json({error : err})

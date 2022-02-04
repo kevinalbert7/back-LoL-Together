@@ -58,7 +58,7 @@ app.get('/filter', async (req, res) => {
     
     // console.log(req.query)
     try {
-        const filterUser = await User.find(findParams)
+        const filterUsers = await User.find(findParams)
             .sort({ username: sort })
             .populate('teams')
             .populate('announcements')
@@ -69,7 +69,7 @@ app.get('/filter', async (req, res) => {
                 }
             })
             .exec()
-        res.json(filterUser) 
+        res.json(filterUsers) 
     } catch (err) {
         console.log(err)
         res.status(500).json({error : err})

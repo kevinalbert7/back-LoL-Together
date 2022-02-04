@@ -2,6 +2,8 @@ const express = require("express")
 const app = express()
 
 const Announcement = require('../models/Announcement')
+const Team = require('../models/Team')
+const User = require('../models/User')
 
 app.get('/', async (req, res) => {
   try {
@@ -41,6 +43,33 @@ app.put('/:id', async (req, res) => {
   } catch (err) {
     console.log(err)
     res.status(500).json({ error: err })
+  }
+})
+
+//---Route qui filtre par users ou teams---
+app.get('/filter', async (req, res) => {
+  const { sortby } = req.query
+
+  if (sortby === "teams") {      
+      try {
+        const teams = await Team.find()
+        .populate('announcements')
+        .exec()
+        res.json(teams)
+      } catch (err) {
+          res.status(500).json({ error: err })
+      }
+      
+    } 
+  if (sortby === "users") {
+    try {
+        const users = await User.find()
+        .populate('announcements')
+        .exec()
+        res.json(users)
+    } catch (err) {
+        res.status(500).json({ error: err })
+    }
   }
 })
 
