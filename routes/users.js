@@ -19,6 +19,63 @@ app.get('/', async (req, res) => {
     }
 })
 
+//---Route qui filtre---
+
+app.get('/filter', async (req, res) => {
+    const { sort, region, roles, languages, disponibilty, available } = req.query
+    let findParams = {}
+
+    if (region) {
+        findParams = {
+            ...findParams,
+            region : { $in : region.split(",") }
+        }
+    }
+    if (languages) {
+        findParams = {
+            ...findParams,
+            languages : { $in : languages.split(",") }
+        }
+    }
+    if (available) {
+        findParams = {
+            ...findParams,
+            available : { $in : available.split(",") }
+        }
+    }
+    if (disponibilty) {
+        findParams = {
+            ...findParams,
+            disponibilty : { $in : disponibilty.split(",") }
+        }
+    }
+    if (roles) {
+        findParams = {
+            ...findParams,
+            roles : { $in : roles.split(",") }
+        }
+    }
+    
+    // console.log(req.query)
+    try {
+        const filterUsers = await User.find(findParams)
+            .sort({ username: sort })
+            .populate('teams')
+            .populate('announcements')
+            .populate({
+                path: 'conversations',
+                populate: {
+                    path: 'messages'
+                }
+            })
+            .exec()
+        res.json(filterUsers) 
+    } catch (err) {
+        console.log(err)
+        res.status(500).json({error : err})
+    }
+})
+
 //---Route qui récupère l'utilisateur par son id---
 
 app.get('/:id', async (req, res) => {

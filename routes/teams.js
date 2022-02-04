@@ -13,7 +13,7 @@ const upload = multer({ dest: 'public' })
 app.get('/', async (req, res) => {
     try {
         const teams = await Team.find().exec()
-
+        
         res.json(teams)
     } catch (err) {
         res.status(500).json({ error: err })
@@ -95,7 +95,45 @@ app.put('/:id', async (req, res) => {
       res.status(500).json({ error: err })
     }
 })
-  
+
+//---Route qui filtre---
+
+app.get('/filter', async (req, res) => {
+    const { sort, region, disponibilty, languages } = req.query
+    let findParams = {}
+
+    if (region) {
+        findParams = {
+            ...findParams,
+            region : { $in : region.split(",") }
+        }
+    }
+    if (languages) {
+        findParams = {
+            ...findParams,
+            languages : { $in : languages.split(",") }
+        }
+    }
+    if (disponibilty) {
+        findParams = {
+            ...findParams,
+            disponibilty : { $in : disponibilty.split(",") }
+        }
+    }
+    
+    console.log(req.query)
+    try {
+        const filterTeams = await Team.find(findParams)
+            .sort({ username: sort })
+            .populate('users')
+            .populate('announcements')
+            .exec()
+        res.json(filterTeams) 
+    } catch (err) {
+        console.log(err)
+        res.status(500).json({error : err})
+    }
+})
 
 //---Route qui supprime une team---
 
