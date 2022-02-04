@@ -5,7 +5,9 @@ const Announcement = require('../models/Announcement')
 
 app.get('/', async (req, res) => {
   try {
-    const announcements = await Announcement.find().exec()
+    const announcements = await Announcement.find()
+      .sort({ createdAt: '-1' })
+      .exec()
 
     res.json(announcements)
   } catch (err) {

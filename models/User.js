@@ -17,11 +17,12 @@ const UserSchema = new mongoose.Schema({
     },
     summoner_name: {
         type: String,
+        required: true
+    },
+    summoner_infos: {
+        type: Object,
     },
     avatar: {
-        type: String,
-    },
-    rank: {
         type: String,
     },
     discord: {
@@ -45,13 +46,13 @@ const UserSchema = new mongoose.Schema({
     roles: [{
         type: String,
     }],
-    announcements: [{
+    announcement_id: [{
         type: mongoose.Schema.Types.ObjectId, ref: "Announcement"  
     }],
-    conversations: [{
+    conversation_id: [{
         type: mongoose.Schema.Types.ObjectId, ref: "Conversation",
     }],
-    teams: [{
+    team_id: [{
         type: mongoose.Schema.Types.ObjectId, ref: "Team",
     }], 
     website: {
@@ -63,32 +64,32 @@ const UserSchema = new mongoose.Schema({
     }
 )
 
-UserSchema.post('save', async function(user) {
+UserSchema.post('save', async user => {
     await mongoose.model('Announcement').findOneAndUpdate(
-        { _id: user.announcements },
+        { _id: user.announcement_id },
         { $push: { users: user._id } }
     )
     await mongoose.model('Conversation').findOneAndUpdate(
-        { _id: user.conversations },
+        { _id: user.conversation_id },
         { $push: { users: user._id } }
-        )
+    )
     await mongoose.model('Team').findOneAndUpdate(
-        { _id: user.teams },
+        { _id: user.team_id },
         { $push: { users: user._id } }
-        )
+    )
 })
 
 UserSchema.post('findOneAndDelete', async function(user) {
     await mongoose.model('Announcement').findOneAndUpdate(
-        { _id: user.announcements  },
+        { _id: user.announcement_id  },
         { $pull: { users: user._id} }
     )
     await mongoose.model('Conversation').findOneAndUpdate(
-        { _id: user.conversations  },
+        { _id: user.conversation_id  },
         { $pull: { users: user._id} }
     )
     await mongoose.model('Team').findOneAndUpdate(
-        { _id: user.teams  },
+        { _id: user.team_id  },
         { $pull: { users: user._id} }
     )
 })

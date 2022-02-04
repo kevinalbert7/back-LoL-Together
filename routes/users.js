@@ -26,9 +26,15 @@ app.get('/:id', async (req, res) => {
     
     try {
         const user = await User.findById(id)
-            .populate('teams')
-            .exec()
-
+        .populate('teams')
+        .populate('announcements')
+        .populate({
+            path: 'conversations',
+            populate: {
+                path: 'messages'
+            }
+        })
+        .exec()
         res.json(user)
     } catch (err) {
         res.status(500).json({ error: err })
@@ -55,7 +61,7 @@ app.post('/upload/:id', upload.single('avatar'), async(req, res) => {
             { avatar: `http://localhost:5000/${fileName}` }
         )
     
-        res.json({ success: "logo uploaded" })
+        res.json({ success: "Avatar uploaded" })
     } catch (e) {
         res.status(500).json({ error : "something went wrong" })
     }
@@ -66,15 +72,15 @@ app.put('/:id', async (req, res) => {
     const { id } = req.params
   
     try {
-      const user = await User.findOneAndUpdate(
-        { _id: id },
-        { ...req.body },
-        { new: true }
-      ).exec()
-      res.json(user)
+        const user = await User.findOneAndUpdate(
+            { _id: id },
+            { ...req.body },
+            { new: true }
+        ).exec()
+        res.json(user)
     } catch (err) {
-      console.log(err)
-      res.status(500).json({ error: err })
+        console.log(err)
+        res.status(500).json({ error: err })
     }
   })
   

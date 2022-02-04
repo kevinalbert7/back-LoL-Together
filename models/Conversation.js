@@ -14,21 +14,21 @@ const ConversationSchema = new mongoose.Schema({
   }
 )
 
-ConversationSchema.post('save', async conversations => {
+ConversationSchema.post('save', async conversation => {
   await mongoose.model('User').updateMany(
-    { _id:{ $in : conversations.users } },
-    { $push: { conversations: conversations._id } }
+    { _id:{ $in : conversation.users } },
+    { $push: { conversations: conversation._id } }
   )
 })
 
-ConversationSchema.post('findOneAndDelete', async conversations => {
+ConversationSchema.post('findOneAndDelete', async conversation => {
   await mongoose.model('User').deleteMany(
-    { conversations: {$in : conversations.users } },
-    { $pull: { conversations: conversations._id} }
+    { conversation: {$in : conversation.user } },
+    { $pull: { conversations: conversation._id} }
   )
   await mongoose.model('Message').deleteMany(
-    { message: {$in : conversations.messages } },
-    { $pull: { conversations: conversations._id} }
+    { message: {$in : conversation.message } },
+    { $pull: { conversations: conversation._id} }
   )
 })
 

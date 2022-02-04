@@ -22,30 +22,30 @@ app.get('/', async (req, res) => {
 // (du sender et du receiver) le contenu
 // une fois sauvegardé, on rajoute le message à la conversation grâce à son id
 
-app.post('/:id', async (req, res) => {
-    const { id } = req.params
-    const { 
-        user_id,
-        conversation,
-        conversation_id,
-        message_id
-    } = req.body
+// app.post('/:id', async (req, res) => {
+//     const { id } = req.params
+//     const { 
+//         user_id,
+//         conversation,
+//         conversation_id,
+//         message_id
+//     } = req.body
 
     // const message = await Message.create({
     //     conversation
     // })
 
-    await Conversation.findById(id)
+    // await Conversation.findById(id)
 
-    await User.findOneAndUpdate(
-        { _id: user_id },
-        { $push: { conversations: conversation_id } }
-    )
+    // await User.findOneAndUpdate(
+    //     { _id: user_id },
+    //     { $push: { conversations: conversation_id } }
+    // )
     
-    await Conversation.findOneAndUpdate(
-        { _id: conversation_id },
-        { $push: { message: message_id } }
-    )
+    // await Conversation.findOneAndUpdate(
+    //     { _id: conversation_id },
+    //     { $push: { message: message_id } }
+    // )
     // res.json({ success: "message posted"})
 
     // try {
