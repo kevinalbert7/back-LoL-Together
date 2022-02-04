@@ -56,7 +56,7 @@ app.get('/filter', async (req, res) => {
         }
     }
     
-    console.log(req.query);
+    // console.log(req.query)
     try {
         const filterUser = await User.find(findParams)
             .sort({ username: sort })

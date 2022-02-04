@@ -95,7 +95,51 @@ app.put('/:id', async (req, res) => {
       res.status(500).json({ error: err })
     }
 })
-  
+
+//---Route qui filtre---
+
+app.get('/filter', async (req, res) => {
+    const { sort, region, disponibilty, languages } = req.query
+    let findParams = {}
+
+    if (region) {
+        findParams = {
+            ...findParams,
+            region : { $in : region.split(",") }
+        }
+    }
+    if (languages) {
+        findParams = {
+            ...findParams,
+            languages : { $in : languages.split(",") }
+        }
+    }
+    if (disponibilty) {
+        findParams = {
+            ...findParams,
+            disponibilty : { $in : disponibilty.split(",") }
+        }
+    }
+    
+    console.log(req.query)
+    try {
+        const filterUser = await User.find(findParams)
+            .sort({ username: sort })
+            .populate('teams')
+            .populate('announcements')
+            .populate({
+                path: 'conversations',
+                populate: {
+                    path: 'messages'
+                }
+            })
+            .exec()
+        res.json(filterUser) 
+    } catch (err) {
+        console.log(err)
+        res.status(500).json({error : err})
+    }
+})
 
 //---Route qui supprime une team---
 
