@@ -21,13 +21,58 @@ app.get('/', async (req, res) => {
 
 //---Route qui filtre---
 
-app.get('/', async (req, res) => {
-    try {
-        const users = await User.find().exec()
+app.get('/filter', async (req, res) => {
+    const { sort, region, roles, languages, disponibilty, available } = req.query
+    let findParams = {}
 
-        res.json(users)
+    if (region) {
+        findParams = {
+            ...findParams,
+            region : { $in : region.split(",") }
+        }
+    }
+    if (languages) {
+        findParams = {
+            ...findParams,
+            languages : { $in : languages.split(",") }
+        }
+    }
+    if (available) {
+        findParams = {
+            ...findParams,
+            available : { $in : available.split(",") }
+        }
+    }
+    if (disponibilty) {
+        findParams = {
+            ...findParams,
+            disponibilty : { $in : disponibilty.split(",") }
+        }
+    }
+    if (roles) {
+        findParams = {
+            ...findParams,
+            roles : { $in : roles.split(",") }
+        }
+    }
+    
+    console.log(req.query);
+    try {
+        const filterUser = await User.find(findParams)
+            .sort({ username: sort })
+            .populate('teams')
+            .populate('announcements')
+            .populate({
+                path: 'conversations',
+                populate: {
+                    path: 'messages'
+                }
+            })
+            .exec()
+        res.json(filterUser) 
     } catch (err) {
-        res.status(500).json({ error: err })
+        console.log(err)
+        res.status(500).json({error : err})
     }
 })
 
