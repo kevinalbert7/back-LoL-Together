@@ -1,8 +1,8 @@
 const express = require("express")
 const multer = require("multer")
 const app = express()
-// const moment = require("moment")
-
+const moment = require("moment")
+const fs = require('fs')
 const { verifyExistingTeam } = require("../middlewares/auth")
 const Team = require('../models/Team')
 
@@ -28,6 +28,7 @@ app.get('/:id', async (req, res) => {
     try {
         const team = await Team.findById(id)
         .populate('users')
+        .populate('announcements')
         .exec()
 
         res.json(team)
@@ -53,21 +54,30 @@ app.post('/', verifyExistingTeam, async (req, res) => {
 
 //---Route qui upload un logo---
 
-app.post('/:id', upload.single('logo'), (req, res) => {
-    console.log(req.file)
-    const { 
-        path,
-        destination,
-        originalname
-     } = req.file
+app.post('/upload/:id', upload.single('logo'), async(req, res) => {
+  const { id } = req.params
+  const { 
+      path,
+      destination,
+      originalname
+   } = req.file
 
-    const date = moment().format('DD-MM-YYYY-hh-mm-ss')
-    console.log(date)
-    const fileName = `${date}-${originalname}`
-    console.log(fileName)
-    fs.renameSync(path, `${destination}/${originalname}`)
-    res.json({ success: "logo uploaded" })
+  try {
+      const date = moment().format('DD-MM-YYYY-hh-mm-ss')
+      const fileName = `${date}-${originalname}`
+      fs.renameSync(path, `${destination}/${fileName}`)
+  
+      await Team.findOneAndUpdate(
+          { _id: id },
+          { logo: `http://localhost:5000/${fileName}` }
+      )
+  
+      res.json({ success: "Logo uploaded" })
+  } catch (e) {
+      res.status(500).json({ error : "something went wrong" })
+  }
 })
+
 
 //---Route qui modifie une team---
 app.put('/:id', async (req, res) => {
