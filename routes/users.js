@@ -19,6 +19,18 @@ app.get('/', async (req, res) => {
     }
 })
 
+//---Route qui filtre---
+
+app.get('/', async (req, res) => {
+    try {
+        const users = await User.find().exec()
+
+        res.json(users)
+    } catch (err) {
+        res.status(500).json({ error: err })
+    }
+})
+
 //---Route qui récupère l'utilisateur par son id---
 
 app.get('/:id', async (req, res) => {
