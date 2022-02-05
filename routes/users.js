@@ -22,7 +22,7 @@ app.get('/', async (req, res) => {
 //---Route qui filtre---
 
 app.get('/filter', async (req, res) => {
-    const { sort, region, roles, languages, disponibilty, available } = req.query
+    const { sort, region, roles, languages, disponibilities, available } = req.query
     let findParams = {}
 
     if (region) {
@@ -43,10 +43,10 @@ app.get('/filter', async (req, res) => {
             available : { $in : available.split(",") }
         }
     }
-    if (disponibilty) {
+    if (disponibilities) {
         findParams = {
             ...findParams,
-            disponibilty : { $in : disponibilty.split(",") }
+            disponibilities : { $in : disponibilities.split(",") }
         }
     }
     if (roles) {
