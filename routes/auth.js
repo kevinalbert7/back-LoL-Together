@@ -8,7 +8,7 @@ const passport = require("../config/passport")
 const { verifyExistingUser } = require("../middlewares/auth")
 const User = require("../models/User")
 
-const api_key = "RGAPI-185af702-858a-4302-b4d7-5a9dff310c98"
+const api_key = "RGAPI-62f462d1-7eb9-4e62-a241-0e775aa372cb"
 
 //----------------LOGIN-----------------
 
