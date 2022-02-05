@@ -33,15 +33,15 @@ const UserSchema = new mongoose.Schema({
     region: {
         type: String,
     },
-    languages: {
+    languages: [{
         type: String,
-    },
+    }],
     description: {
         type: String,
     },
-    disponibilities: {
+    disponibilities: [{
         type: String,
-    },
+    }],
     roles: [{
         type: String,
     }],
