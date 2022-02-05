@@ -16,18 +16,18 @@ const TeamSchema = new mongoose.Schema({
     rank: {
         type: String,
     },
-    languages: {
+    languages: [{
         type: String,
-    },
+    }],
     region: {
         type: String,
     },
     description: {
         type: String,
     },
-    disponibilities: {
+    disponibilities: [{
         type: String,
-    },
+    }],
     website: {
         type: String,
     },
