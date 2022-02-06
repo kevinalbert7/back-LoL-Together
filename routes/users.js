@@ -83,7 +83,7 @@ app.get('/:id', async (req, res) => {
     
     try {
         const user = await User.findById(id)
-        .populate('teams')
+        .populate('teams', 'name')
         .populate('announcements')
         .populate({
             path: 'conversations',
