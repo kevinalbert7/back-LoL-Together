@@ -9,9 +9,9 @@ const cors = require("cors")
 const morgan = require('morgan')
 const mongoose = require("mongoose")
 
-console.log("DB.URL :", process.env.DB_URL)
+// console.log("DB.URL :", process.env.DB_URL)
 const DB_URL = process.env.DB_URL
-mongoose.connect(process.env.DB_URL)
+mongoose.connect(DB_URL)
 const db = mongoose.connection
 
 db.on("error", (err) => console.log(err))
