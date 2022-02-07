@@ -17,6 +17,19 @@ app.get('/', async (req, res) => {
   }
 })
 
+app.get('/:id', async (req, res) => {
+  const { id } = req.params
+  
+  try {
+      const announcements = await Announcement.find({ user: id })
+      .sort({ createdAt: '-1' })
+      .exec()
+      res.json(announcements)
+  } catch (err) {
+      res.status(500).json({ error: err })
+  }
+})
+
 app.post('/', async (req, res) => {
   try {
     const newAnnouncement = await Announcement.create({

@@ -61,7 +61,10 @@ app.get('/filter', async (req, res) => {
         const filterUsers = await User.find(findParams)
             .sort({ username: sort })
             .populate('teams')
-            .populate('announcements')
+            .populate({
+                path : 'announcements',
+                sort : { createAt : -1 }
+            })
             .populate({
                 path: 'conversations',
                 populate: {
