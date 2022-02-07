@@ -9,6 +9,8 @@ app.get('/', async (req, res) => {
   try {
     const announcements = await Announcement.find()
       .sort({ createdAt: '-1' })
+      .populate('user', 'username summoner_name region summoner_infos')
+      .populate('team', 'leader_id name logo region')
       .exec()
 
     res.json(announcements)
