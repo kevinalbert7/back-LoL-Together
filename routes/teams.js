@@ -3,7 +3,7 @@ const multer = require("multer")
 const app = express()
 const moment = require("moment")
 const fs = require('fs')
-const { verifyExistingTeam } = require("../middlewares/auth")
+const { verifyExistingTeam, isAuthentified } = require("../middlewares/auth")
 const Team = require('../models/Team')
 
 const upload = multer({ dest: 'public' })
@@ -15,8 +15,8 @@ app.get('/', async (req, res) => {
         const teams = await Team.find().exec()
         
         res.json(teams)
-    } catch (err) {
-        res.status(500).json({ error: err })
+    } catch (error) {
+        res.status(500).json({ error })
     }
 })
 
@@ -54,9 +54,8 @@ app.get('/filter', async (req, res) => {
             .populate('announcements')
             .exec()
         res.json(filterTeams) 
-    } catch (err) {
-        console.log(err)
-        res.status(500).json({error : err})
+    } catch (error) {
+        res.status(500).json({ error })
     }
 })
 
@@ -72,8 +71,8 @@ app.get('/:id', async (req, res) => {
         .exec()
 
         res.json(team)
-    } catch (err) {
-        res.status(500).json({ error: err })
+    } catch (error) {
+        res.status(500).json({ error })
     }
 })
 
@@ -81,16 +80,16 @@ app.get('/:id', async (req, res) => {
 
 //---Route qui créé une nouvelle team---
 
-app.post('/', verifyExistingTeam, async (req, res) => {
+app.post('/', verifyExistingTeam, isAuthentified, async (req, res) => {
     try {  
       const newTeam = await Team.create({
         ...req.body,
+        leader_id : req.user._id
       })
   
       res.json(newTeam)
-    } catch (e) {
-      console.log(e)
-      res.status(500).json({ error: "Oups, something went wrong" })
+    } catch (error) {
+      res.status(500).json({ error })
     }
 })
 
@@ -115,14 +114,14 @@ app.post('/upload/:id', upload.single('logo'), async(req, res) => {
       )
   
       res.json({ success: "Logo uploaded" })
-  } catch (e) {
-      res.status(500).json({ error : "something went wrong" })
+  } catch (error) {
+      res.status(500).json({ error })
   }
 })
 
 
 //---Route qui modifie une team---
-app.put('/:id', async (req, res) => {
+app.put('/:id', isAuthentified, async (req, res) => {
     const { id } = req.params
   
     try {
@@ -132,23 +131,22 @@ app.put('/:id', async (req, res) => {
         { new: true }
       ).exec()
       res.json(team)
-    } catch (err) {
-      console.log(err)
-      res.status(500).json({ error: err })
+    } catch (error) {
+      res.status(500).json({ error })
     }
 })
 
 //---Route qui supprime une team---
 
-app.delete('/:id', async (req, res) => {
+app.delete('/:id', isAuthentified, async (req, res) => {
     const { id } = req.params
 
     try {
         const teamDeleted = await Team.findOneAndDelete({ _id: id }).exec()
 
         res.json(teamDeleted)
-    } catch (err) {
-        res.status(500).json({ error: err })
+    } catch (error) {
+        res.status(500).json({ error })
     }
 })
 
