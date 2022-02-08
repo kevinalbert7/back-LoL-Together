@@ -5,6 +5,8 @@ const Announcement = require('../models/Announcement')
 const Team = require('../models/Team')
 const User = require('../models/User')
 
+const { isAuthentified } = require("../middlewares/auth")
+
 app.get('/', async (req, res) => {
   try {
     const announcements = await Announcement.find()
@@ -14,8 +16,9 @@ app.get('/', async (req, res) => {
       .exec()
 
     res.json(announcements)
-  } catch (err) {
-    res.status(500).json({ error: err })
+  } catch (error) {
+    console.log(error)
+    res.status(500).json({ error })
   }
 })
 
@@ -27,25 +30,26 @@ app.get('/:id', async (req, res) => {
       .sort({ createdAt: '-1' })
       .exec()
       res.json(announcements)
-  } catch (err) {
-      res.status(500).json({ error: err })
+  } catch (error) {
+      console.log(error)
+      res.status(500).json({ error })
   }
 })
 
-app.post('/', async (req, res) => {
+app.post('/', isAuthentified, async (req, res) => {
   try {
     const newAnnouncement = await Announcement.create({
       ...req.body
     })
     
     res.json(newAnnouncement)
-  } catch (err) {
-    console.log(err)
-    res.status(500).json({ error: "Oups, something went wrong" })
+  } catch (error) {
+    console.log(error)
+    res.status(500).json({ error })
   }
 })
 
-app.put('/:id', async (req, res) => {
+app.put('/:id', isAuthentified, async (req, res) => {
   const { id } = req.params
 
   try {
@@ -55,9 +59,9 @@ app.put('/:id', async (req, res) => {
       { new: true }
     ).exec()
     res.json(announcement)
-  } catch (err) {
-    console.log(err)
-    res.status(500).json({ error: err })
+  } catch (error) {
+    console.log(error)
+    res.status(500).json({ error })
   }
 })
 
@@ -71,8 +75,9 @@ app.get('/filter', async (req, res) => {
         .populate('announcements')
         .exec()
         res.json(teams)
-      } catch (err) {
-          res.status(500).json({ error: err })
+      } catch (error) {
+          console.log(error)
+          res.status(500).json({ error })
       }
       
     } 
@@ -82,21 +87,23 @@ app.get('/filter', async (req, res) => {
         .populate('announcements')
         .exec()
         res.json(users)
-    } catch (err) {
-        res.status(500).json({ error: err })
+    } catch (error) {
+        console.log(error)
+        res.status(500).json({ error })
     }
   }
 })
 
-app.delete('/:id', async (req, res) => {
+app.delete('/:id', isAuthentified, async (req, res) => {
   const { id } = req.params
 
   try{
     await Announcement.findOneAndDelete({ _id: id }).exec()
     
     res.json({ success: 'Announcement successfully deleted' })
-  } catch (err) {
-    res.status(500).json({ error: err })
+  } catch (error) {
+    console.log(error)
+    res.status(500).json({ error })
   }
 })
 

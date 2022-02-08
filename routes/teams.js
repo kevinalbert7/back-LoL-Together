@@ -16,6 +16,7 @@ app.get('/', async (req, res) => {
         
         res.json(teams)
     } catch (error) {
+        console.log(error)
         res.status(500).json({ error })
     }
 })
@@ -55,6 +56,7 @@ app.get('/filter', async (req, res) => {
             .exec()
         res.json(filterTeams) 
     } catch (error) {
+        console.log(error)
         res.status(500).json({ error })
     }
 })
@@ -72,6 +74,7 @@ app.get('/:id', async (req, res) => {
 
         res.json(team)
     } catch (error) {
+        console.log(error)
         res.status(500).json({ error })
     }
 })
@@ -89,7 +92,8 @@ app.post('/', verifyExistingTeam, isAuthentified, async (req, res) => {
   
       res.json(newTeam)
     } catch (error) {
-      res.status(500).json({ error })
+        console.log(error)
+        res.status(500).json({ error })
     }
 })
 
@@ -115,7 +119,8 @@ app.post('/upload/:id', upload.single('logo'), async(req, res) => {
   
       res.json({ success: "Logo uploaded" })
   } catch (error) {
-      res.status(500).json({ error })
+        console.log(error)
+        res.status(500).json({ error })
   }
 })
 
@@ -132,7 +137,8 @@ app.put('/:id', isAuthentified, async (req, res) => {
       ).exec()
       res.json(team)
     } catch (error) {
-      res.status(500).json({ error })
+        console.log(error)
+        res.status(500).json({ error })
     }
 })
 
@@ -146,6 +152,7 @@ app.delete('/:id', isAuthentified, async (req, res) => {
 
         res.json(teamDeleted)
     } catch (error) {
+        console.log(error)
         res.status(500).json({ error })
     }
 })
