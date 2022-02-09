@@ -30,6 +30,7 @@ app.use(session({
 app.use(morgan('tiny'))
 app.use(passport.initialize())
 app.use(passport.session())
+app.use(express.static('public'))
 
 require('./models/Announcement')
 require('./models/Conversation')
