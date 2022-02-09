@@ -58,31 +58,31 @@ TeamSchema.post('findOneAndDelete', async team => {
 })
 
 TeamSchema.pre('findOneAndUpdate', async function() {
-    // const upToDateUsers = this.getUpdate().users
-    // const teamId = this.getQuery()._id
-    // const team = await mongoose.model('Team').findById(teamId)
-    // const currentUsers = team.users.map(u => u.toString())
+    const upToDateUsers = this.getUpdate().users
+    const teamId = this.getQuery()._id
+    const team = await mongoose.model('Team').findById(teamId)
+    const currentUsers = team.users.map(u => u.toString())
 
-    // console.log("upToDateUsers", upToDateUsers)
-    // console.log("currentUsers", currentUsers)
+    console.log("upToDateUsers", upToDateUsers)
+    console.log("currentUsers", currentUsers)
 
-    // const differenceAdd = lodash.difference(upToDateUsers, currentUsers)
-    // // console.log("differenceAdd", differenceAdd)
+    const differenceAdd = lodash.difference(upToDateUsers, currentUsers)
+    // console.log("differenceAdd", differenceAdd)
 
-    // const differenceRemove = lodash.difference(currentUsers, upToDateUsers)
-    // console.log("differenceRemove", differenceRemove)
+    const differenceRemove = lodash.difference(currentUsers, upToDateUsers)
+    console.log("differenceRemove", differenceRemove)
 
-    // if (differenceAdd.length === 1) {
-    //     await mongoose.model('User').findOneAndUpdate(
-    //         { _id: differenceAdd},
-    //         { $push: { teams : team.id } }
-    //     )
-    // } else {
-    //     await mongoose.model('User').findOneAndUpdate(
-    //         { _id: differenceRemove},
-    //         { $pull: { teams : team.id } }
-    //     )
-    // }
+    if (differenceAdd.length === 1) {
+        await mongoose.model('User').findOneAndUpdate(
+            { _id: differenceAdd},
+            { $push: { teams : team.id } }
+        )
+    } else {
+        await mongoose.model('User').findOneAndUpdate(
+            { _id: differenceRemove},
+            { $pull: { teams : team.id } }
+        )
+    }
     
 })
 
