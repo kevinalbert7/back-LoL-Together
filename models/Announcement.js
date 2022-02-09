@@ -23,7 +23,7 @@ AnnouncementSchema.post('save', async announcements => {
     { _id: announcements.user },
     { $push: { announcements: announcements._id } }
   )
-  await mongoose.model('Team').findOneAndUpdate(
+  await mongoose.model('Team').updateOne(
     { _id: announcements.team },
     { $push: { announcements: announcements._id } }
   )
@@ -34,7 +34,7 @@ AnnouncementSchema.post('findOneAndDelete', async announcements => {
     { _id: announcements.user },
     { $pull: { announcements: announcements._id} }
   )
-  await mongoose.model('Team').findOneAndUpdate(
+  await mongoose.model('Team').updateOne(
     { _id: announcements.team },
     { $pull: { announcements: announcements._id} }
   )
