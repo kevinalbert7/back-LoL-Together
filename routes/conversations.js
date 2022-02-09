@@ -9,7 +9,8 @@ const app = express()
 
 app.get('/', async (req, res) => {
     try {
-        const conversations = await Conversation.find().exec()
+        const conversations = await Conversation.find()
+        .exec()
         res.json(conversations)
     } catch (err) {
         res.status(500).json({ error: err })
@@ -19,20 +20,21 @@ app.get('/', async (req, res) => {
 //---Route qui récupère 1 conversation des 2 users
 
 app.get('/users', async (req, res) => {
-    
     const { ids } = req.query
     const queryUsers = ids.split(",")
-    const conversation = await Conversation.findOne(
-        { users : [queryUsers[0], queryUsers[1]] }
-    ).exec()
 
-    console.log(conversation)
-    // try {
-    //     const conversations = await Conversation.find().exec()
-    //     res.json(conversations)
-    // } catch (err) {
-    //     res.status(500).json({ error: err })
-    // }
+    try {
+        const conversation = await Conversation.findOne(
+            { users : [queryUsers[0], queryUsers[1]] }
+        )
+        .populate('messages')
+        .exec()
+        
+        res.json(conversation)
+    } catch (error) {
+        console.log(error)
+        res.status(500).json({ error })
+    }
 })
 
 //---Route qui récupère une conversation par son id---
