@@ -29,6 +29,14 @@ app.get('/users', async (req, res) => {
         )
         .populate('messages')
         .exec()
+        if (!conversation) {
+            const conversation = await Conversation.findOne(
+                { users : [queryUsers[1], queryUsers[0]] }
+            )
+            .populate('messages')
+            .exec()
+            res.json(conversation)
+        }
         
         res.json(conversation)
     } catch (error) {
