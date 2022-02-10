@@ -28,7 +28,10 @@ app.get('/users', async (req, res) => {
     let conversation = []
     try {
         conversation = await Conversation.findOne(
-            { users : queryUsers[0], users: queryUsers[1] }
+            { $and : [
+                {users: { $in : queryUsers[0] }}, 
+                {users: { $in : queryUsers[1] }}  
+            ]}
         )
         .populate('messages')
         .exec()
