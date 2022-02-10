@@ -27,7 +27,7 @@ app.post('/login',
   }
 )
 
-//----------------SINGUP-----------------
+//----------------SIGNUP-----------------
 
 app.post('/signup', verifyExistingUser, async (req, res) => {
   try {
