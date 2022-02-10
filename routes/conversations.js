@@ -22,22 +22,17 @@ app.get('/', async (req, res) => {
 app.get('/users', async (req, res) => {
     const { ids } = req.query
     const queryUsers = ids.split(",")
-
+    console.log(queryUsers)
+    // const queryUsersReverse = queryUsers.reverse()
+    // console.log(queryUsersReverse)
+    let conversation = []
     try {
-        const conversation = await Conversation.findOne(
-            { users : [queryUsers[0], queryUsers[1]] }
+        conversation = await Conversation.findOne(
+            { users : queryUsers[0], users: queryUsers[1] }
         )
         .populate('messages')
         .exec()
-        if (!conversation) {
-            const conversation = await Conversation.findOne(
-                { users : [queryUsers[1], queryUsers[0]] }
-            )
-            .populate('messages')
-            .exec()
-            res.json(conversation)
-        }
-        
+    
         res.json(conversation)
     } catch (error) {
         console.log(error)
