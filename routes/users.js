@@ -101,6 +101,37 @@ app.get('/:id', async (req, res) => {
     }
 })
 
+//---Route qui modifie un utilisateur---
+app.put('/:id', async (req, res) => {
+    const { id } = req.params
+  
+    try {
+        const user = await User.findOneAndUpdate(
+        { _id: id },
+        { ...req.body },
+        { new: true }
+        ).exec()
+        res.json(user)
+    } catch (err) {
+        console.log(err)
+        res.status(500).json({ error: err })
+    }
+  })
+  
+//---Route qui supprime un utilisateur---
+
+app.delete('/:id', async (req, res) => {
+    const { id } = req.params
+    
+    try {
+        const userDeleted = await User.findOneAndDelete({ _id: id }).exec()
+        
+        res.json(userDeleted)
+    } catch (err) {
+        res.status(500).json({ error: err })
+    }
+})
+
 //---Route qui upload un logo---
 
 // app.post('/upload/:id', upload.single('avatar'), async(req, res) => {
@@ -126,37 +157,6 @@ app.get('/:id', async (req, res) => {
 //         res.status(500).json({ error : "something went wrong" })
 //     }
 // })
-
-//---Route qui modifie un utilisateur---
-app.put('/:id', async (req, res) => {
-    const { id } = req.params
-  
-    try {
-      const user = await User.findOneAndUpdate(
-        { _id: id },
-        { ...req.body },
-        { new: true }
-      ).exec()
-      res.json(user)
-    } catch (err) {
-      console.log(err)
-      res.status(500).json({ error: err })
-    }
-  })
-  
-//---Route qui supprime un utilisateur---
-
-app.delete('/:id', async (req, res) => {
-    const { id } = req.params
-
-    try {
-        const userDeleted = await User.findOneAndDelete({ _id: id }).exec()
-
-        res.json(userDeleted)
-    } catch (err) {
-        res.status(500).json({ error: err })
-    }
-})
 
 
 module.exports= app
